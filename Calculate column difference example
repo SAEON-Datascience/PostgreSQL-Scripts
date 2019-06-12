@@ -1,0 +1,6 @@
+CREATE VIEW schema.tablename
+AS SELECT 
+attribute_1,
+attribute_2 - attribute_3 AS name
+FROM
+schema.tablename2
