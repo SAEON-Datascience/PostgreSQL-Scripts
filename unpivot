@@ -1,0 +1,7 @@
+CREATE TEMP TABLE foo (id int, a text, b text, c text);
+INSERT INTO foo VALUES (1, 'ant', 'cat', 'chimp'), (2, 'grape', 'mint', 'basil');
+SELECT id,
+       unnest(array['a', 'b', 'c']) AS colname,
+       unnest(array[a, b, c]) AS thing
+FROM foo
+ORDER BY id;
