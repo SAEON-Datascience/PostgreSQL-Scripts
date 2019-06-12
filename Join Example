@@ -2,10 +2,10 @@ CREATE TABLE schema.name
 AS SELECT 
 table1.attribute1,
 table1.attribute2,
-table1.attribute2
-table2.attribute1
+table1.attribute3,
+table2.attribute1,
 table2.attribute2
 FROM schema.table1
-INNER schema.table2 
+INNER JOIN schema.table2 
 ON 
 table1.attribute1 = table2.attribute1;
