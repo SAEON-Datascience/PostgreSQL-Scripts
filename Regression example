@@ -1,0 +1,46 @@
+ALTER TABLE gva.transport_time_shp ADD COLUMN id SERIAL PRIMARY KEY;
+
+Create Table "driver.gva".transport_95_13_driver as 
+WITH a AS (
+        SELECT id, pagenumber, geom
+        , (year - '1995-12-31'::date) as idate 
+        , gva AS value
+        FROM gva.transport_time_shp
+        )
+SELECT  pagenumber
+	, geom
+        , regr_intercept(value,idate)  AS intercept
+        , regr_slope(value,idate)  AS exposure
+        , regr_r2(value,idate)*100  AS probability
+        , regr_avgy(value,idate)  AS gva_ave
+	, stddev_samp(value) AS uncertainty
+FROM a
+GROUP BY pagenumber, geom
+ORDER BY pagenumber ASC
+        ;
+CREATE TABLE public.test_residuals AS
+SELECT
+	agri_time_shp.id,
+	agri_time_shp.pagenumber,
+	agri_time_shp.gva,
+	agri_time_shp.year,
+	sic_1_95_13_driver.intercept,
+	sic_1_95_13_driver.exposure,
+	sic_1_95_13_driver.probability,
+	sic_1_95_13_driver.gva_ave,
+	sic_1_95_13_driver.uncertainty
+FROM gva.agri_time_shp
+INNER JOIN "driver.gva".sic_1_95_13_driver 
+ON agri_time_shp.pagenumber = sic_1_95_13_driver.pagenumber;
+
+ALTER TABLE public.test_residuals 
+	ADD COLUMN idate numeric,
+	ADD COLUMN expected numeric,
+	ADD COLUMN residual numeric;
+
+UPDATE TABLE public.test_residuals
+	SET idate = (year - '1995-12-31'::date);
+UPDATE TABLE public.test_residuals
+	SET expected = idate * exposure + intercept;
+UPDATE TABLE public.test_residuals
+	SET residual = expected - gva;
