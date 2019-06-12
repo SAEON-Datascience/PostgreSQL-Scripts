@@ -1,0 +1,2 @@
+CREATE TABLE schema.tablename AS
+SELECT 	attribute_1,sum(attribute_2) as attribute2_name group by attribute1;
