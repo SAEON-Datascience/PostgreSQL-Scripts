@@ -1,0 +1,25 @@
+CREATE TABLE bravo.G01
+(UNIQ_ID character varying(18),
+SP_grd1 double precision,
+SACN_grd1 numeric,
+BIOME_grd1 numeric,
+Meso_grd1 double precision,
+DM_grd1 numeric,
+VEG_grd1 numeric,
+lcov90_alb numeric,
+WMA_grd1 numeric);
+
+COPY bravo.g01
+(UNIQ_ID,SP_grd1,
+SACN_grd1,
+BIOME_grd1,
+Meso_grd1,
+DM_grd1,
+VEG_grd1,
+lcov90_alb,
+WMA_grd1) 
+FROM 'F:\GreenBook-Backup\LUdatacube_20171206\CSV_Data_bravo\G01.csv' 
+DELIMITER ',' 
+NULL '*********************' 
+FORCE NULL UNIQ_ID,SP_grd1, SACN_grd1, BIOME_grd1, Meso_grd1, DM_grd1, VEG_grd1, lcov90_alb, WMA_grd1 
+CSV HEADER ;
